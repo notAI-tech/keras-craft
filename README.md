@@ -3,7 +3,7 @@ Extremely easy to use Text Detection module with CRAFT pre-trained model.
 
 keras-craft aims to be production ready and supports features like batch inference (auto batching for images of different size) and tensorflow serving.
 
-
+# Usage
 
 
 # To Do:
