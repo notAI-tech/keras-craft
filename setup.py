@@ -24,7 +24,7 @@ VERSION = '1.0.0'
 REQUIRED = [
     'pydload',
     'tensorflow >= 1.15.0',
-    'keras >= 2.2.4'
+    'keras >= 2.2.2'
 ]
 
 # What packages are optional?
