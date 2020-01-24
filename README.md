@@ -1,8 +1,16 @@
-# keras-craft: Extremely easy to use Text Detection module with CRAFT pre-trained model.
+# keras-craft
+Extremely easy to use Text Detection module with CRAFT pre-trained model.
+
+keras-craft aims to be production ready and supports features like batch inference (auto batching for images of different size) and tensorflow serving.
+
+# Usage
 
 
-This module aims to make using and training the CRAFT text detection model extremenly simple. 
+# To Do:
 
-keras-craft aims to be production ready and supports features like batching for predictions and tensorflow serving.
+1. Train different models for different use-cases. (various languages ..)
+2. Experiment with smaller model(s)
 
-**Note:** Credit for the core keras model, pre-trained model goes to [Fausto Morales](https://github.com/faustomorales/keras-ocr) and Clova.ai
+
+
+**Credit for the core keras model, pre-trained model .. goes to [Fausto Morales](https://github.com/faustomorales/keras-ocr) and Clova.ai**
