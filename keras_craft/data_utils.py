@@ -148,15 +148,12 @@ def keras_pred_to_boxes(y_pred, detection_threshold=0.7, text_threshold=0.4, lin
     return box_groups
 
 
-def _draw_boxes_on_image(image_path, boxes, loaded_image = None, out_path=None, color=(255, 0, 0), thickness=5):
+def draw_boxes_on_image(image_path, boxes, out_path=None, color=(255, 0, 0), thickness=5):
     if not out_path:
         image_type = image_path.split('.')[-1]
         out_path = '.'.join(image_path.split('.')[:-1]) + '.craft.' + image_type
 
-    if loaded_image is None:
-        image = cv2.imread(image_path)
-    else:
-        image = loaded_image
+    image = cv2.imread(image_path)
 
     for box in boxes:
         cv2.polylines(img=image, pts=box[np.newaxis].astype('int32'), color=color, thickness=thickness, isClosed=True)

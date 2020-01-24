@@ -1,12 +1,35 @@
+import os
+import pydload
 import logging
-import data_utils
-from craft_model import build_craft_vgg_model
+from . import data_utils
+from .craft_model import build_craft_vgg_model
 
+model_links = {
+                'generic-english': 'https://github.com/bedapudi6788/keras-craft/releases/download/checkpoint-release/generic-english'
+            }
+
+model_alternate_names = {
+    'default': 'generic-english'
+}
 
 class Detector():
     model = build_craft_vgg_model()
-    def __init__(self, weights_path):
-        Detector.model.load_weights(weights_path)
+    def __init__(self, model_name = 'default'):
+        if model_name in model_alternate_names:
+            model_name = model_alternate_names[model_name]
+
+        home = os.path.expanduser("~")
+        checkpoint_dir = os.path.join(home, '.keras_craft_' + model_name)
+        checkpoint_path = os.path.join(checkpoint_dir, 'checkpoint')
+
+        if not os.path.exists(checkpoint_dir):
+            os.mkdir(checkpoint_dir)
+        
+        if not os.path.exists(checkpoint_path):
+            print('Downloading checkpoint', model_links[model_name], 'to', checkpoint_path)
+            pydload.dload(url=model_links[model_name], save_to_path=checkpoint_path, max_time=None)
+        
+        Detector.model.load_weights(checkpoint_path)
 
     def detect(self, image_paths, max_width=720, max_height=None):
         if not (max_width or max_height):
