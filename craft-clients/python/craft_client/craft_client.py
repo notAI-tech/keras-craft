@@ -1,4 +1,4 @@
-import data_utils
+from . import data_utils
 
 import numpy as np
 import grpc
