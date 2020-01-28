@@ -22,8 +22,8 @@ VERSION = '1.0.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'pydload',
-    'tensorflow >= 1.15.0'
+    'tensorflow >= 1.15.0',
+    'Pillow' if sys.version_info >= (3, 0) else 'pillow',
 ]
 
 # What packages are optional?
