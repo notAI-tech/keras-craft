@@ -31,7 +31,9 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
 
     
 def _read_image(image, max_width, max_height):
-    image = cv2.imread(image)
+    if isinstance(image, type('')):
+        image = cv2.imread(image)
+        
     image, scale = image_resize(image, width=max_width, height=max_height)
 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

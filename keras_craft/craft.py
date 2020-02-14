@@ -32,6 +32,22 @@ class Detector():
         Detector.model.load_weights(checkpoint_path)
 
     def detect(self, image_paths, max_width=720, max_height=None):
+        '''
+        Function for reading image(s), running predictions.
+
+        :param image_paths: single or list of opencv images or image file paths
+        :max_width: images are scaled to this width keeping the aspect ratio.
+        :max_height: either max_width or max_height should be used.
+
+        :return: list of numpy arrays. each array is all the detected boxes in the corresponding image.
+        '''
+        return_single = False
+
+        if not isinstance(image_paths, list):
+            logging.warn('Batch for better performance')
+            return_single = True
+            image_paths = [image_paths]
+
         if not (max_width or max_height):
             logging.warn("Both max_width and max_height are set to None. Only do this if you are aware of the implications.")
 
@@ -40,5 +56,8 @@ class Detector():
         model_predictions = Detector.model.predict(loaded_images)
 
         boxes = data_utils.keras_pred_to_boxes(model_predictions, shapes=shapes_before_padding, scales=scales_before_padding)
+
+        if return_single:
+            boxes = boxes[0]
 
         return boxes
