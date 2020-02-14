@@ -42,6 +42,10 @@ for image_path, boxes in zip(image_paths):
   print(image_with_boxes_path)
 ```
 
+# Example image_with_boxes
+
+![](https://i.imgur.com/EtGvyCz.png)
+
 # To Do:
 
 1. Train different models for different use-cases. (various languages ..)
