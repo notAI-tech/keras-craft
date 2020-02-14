@@ -68,8 +68,9 @@ class Detector():
             
             if return_single:
                 cropped_images = cropped_images[0]
+                boxes = boxes[0]
             
-            return cropped_images
+            return boxes, cropped_images
 
 
         if return_single:
