@@ -24,7 +24,7 @@ VERSION = '1.0.0'
 REQUIRED = [
     'pydload',
     'tensorflow==1.14.0',
-    'keras==2.2.2',
+    'keras==2.2.4',
     'opencv-python'
 ]
 
