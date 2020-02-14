@@ -23,8 +23,8 @@ VERSION = '1.0.0'
 # What packages are required for this module to be executed?
 REQUIRED = [
     'pydload',
-    'tensorflow >= 1.15.0',
-    'keras >= 2.2.2',
+    'tensorflow==1.14.0',
+    'keras==2.2.2',
     'opencv-python'
 ]
 
