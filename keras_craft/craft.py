@@ -1,4 +1,5 @@
 import os
+import cv2
 import pydload
 import logging
 from . import data_utils
@@ -31,7 +32,7 @@ class Detector():
         
         Detector.model.load_weights(checkpoint_path)
 
-    def detect(self, image_paths, max_width=720, max_height=None):
+    def detect(self, image_paths, max_width=720, max_height=None, batch_size=8, return_cropped_images=False):
         '''
         Function for reading image(s), running predictions.
 
@@ -51,11 +52,25 @@ class Detector():
         if not (max_width or max_height):
             logging.warn("Both max_width and max_height are set to None. Only do this if you are aware of the implications.")
 
+        image_paths = [cv2.imread(im) for im in image_paths]
+
         loaded_images, scales_before_padding, shapes_before_padding = data_utils.read_images(image_paths, max_width = max_width, max_height = max_height)
 
-        model_predictions = Detector.model.predict(loaded_images)
+        model_predictions = Detector.model.predict(loaded_images, batch_size=batch_size)
 
         boxes = data_utils.keras_pred_to_boxes(model_predictions, shapes=shapes_before_padding, scales=scales_before_padding)
+
+        if return_cropped_images:
+            cropped_images = []
+
+            for image, _boxes in zip(image_paths, boxes):
+                cropped_images.append([data_utils.get_crop_in_box(image, box) for box in _boxes])
+            
+            if return_single:
+                cropped_images = cropped_images[0]
+            
+            return cropped_images
+
 
         if return_single:
             boxes = boxes[0]

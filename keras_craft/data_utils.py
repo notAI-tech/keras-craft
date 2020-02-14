@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from scipy import spatial
+from shapely import geometry
 
 # taken from https://stackoverflow.com/a/44659589
 def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
@@ -163,3 +165,47 @@ def draw_boxes_on_image(image_path, boxes, out_path=None, color=(255, 0, 0), thi
     cv2.imwrite(out_path, image)
 
     return out_path
+
+def _get_rotated_box(points):
+    mp = geometry.MultiPoint(points=points)
+    pts = np.array(list(zip(*mp.minimum_rotated_rectangle.exterior.xy)))[:-1]  # noqa: E501
+
+    # sort the points based on their x-coordinates
+    xSorted = pts[np.argsort(pts[:, 0]), :]
+
+    leftMost = xSorted[:2, :]
+    rightMost = xSorted[2:, :]
+
+    leftMost = leftMost[np.argsort(leftMost[:, 1]), :]
+    (tl, bl) = leftMost
+
+    D = spatial.distance.cdist(tl[np.newaxis], rightMost, "euclidean")[0]
+    (br, tr) = rightMost[np.argsort(D)[::-1], :]
+
+    pts = np.array([tl, tr, br, bl], dtype="float32")
+
+    rotation = np.arctan((tl[0] - bl[0]) / (tl[1] - bl[1]))
+    return pts, rotation
+
+def get_crop_in_box(image, box, target_height=None, target_width=None, margin=5):
+    cval = (0, 0, 0) if len(image.shape) == 3 else 0
+
+    box, _ = _get_rotated_box(box)
+    _, _, w, h = cv2.boundingRect(box)
+
+    if target_width is None and target_height is None:
+        target_width = w
+        target_height = h
+    
+    scale = min(target_width / w, target_height / h)
+    M = cv2.getPerspectiveTransform(src=box,
+                                    dst=np.array([[margin, margin], [scale * w - margin, margin],
+                                                  [scale * w - margin, scale * h - margin],
+                                                  [margin, scale * h - margin]]).astype('float32'))
+    crop = cv2.warpPerspective(image, M, dsize=(int(scale * w), int(scale * h)))
+    target_shape = (target_height, target_width, 3) if len(image.shape) == 3 else (target_height,
+                                                                                   target_width)
+    full = (np.zeros(target_shape) + cval).astype('uint8')
+    full[:crop.shape[0], :crop.shape[1]] = crop
+
+    return full
