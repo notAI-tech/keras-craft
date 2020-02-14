@@ -22,7 +22,7 @@ VERSION = '1.0.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'tensorflow >= 1.15.0',
+    'tensorflow >= 1.14.0',
     'Pillow' if sys.version_info >= (3, 0) else 'pillow',
 ]
 
