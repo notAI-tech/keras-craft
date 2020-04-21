@@ -9,7 +9,6 @@ keras-craft aims to be production ready and supports features like batch inferen
 
 ```pip install git+https://github.com/notAI-tech/keras-craft``` (the entire library)
 
-**Note: Uninstall tensorflow and install tensorflow-gpu==1.14.0 for usage on gpu. This should be done after the installation of keras-craft and/or TextVision libraries.** 
 
 # Usage (craft_client)
 ```bash
